@@ -8,12 +8,16 @@
 :root{--bg:#080b12;--card:#0e1320;--line:#1d2537;--fg:#dfe6f2;--mut:#7d8aa5;--acc:#ff9a3c;--ok:#5fd0a8;--up:#ff6b57;--dim:#2a3550}
 *{box-sizing:border-box}
 body{margin:0;background:var(--bg);color:var(--fg);font:15px/1.75 -apple-system,"Segoe UI","Microsoft YaHei",sans-serif}
-header{padding:20px 22px 12px;border-bottom:1px solid var(--line);display:flex;flex-wrap:wrap;gap:12px;align-items:baseline;max-width:960px}
+/* 四个块共用一个宽度上限并水平居中：以前只有 960 的上限、又贴左，宽屏上右边空一大条 */
+header,.bar,main,footer{margin-left:auto;margin-right:auto;width:100%}
+/* 容器放开后正文不能跟着放开：一行排到 1080 就是七十多个汉字，没法读 */
+.plain,.note{max-width:62em}
+header{padding:20px 22px 12px;border-bottom:1px solid var(--line);display:flex;flex-wrap:wrap;gap:12px;align-items:baseline;max-width:1080px}
 h1{font-size:21px;margin:0;letter-spacing:.04em}
 .sub{color:var(--mut);font-size:13px}
 .clock{margin-left:auto;font:16px/1 ui-monospace,Consolas,monospace;color:var(--acc)}
 .clock small{color:var(--mut);font-size:11px;display:block;text-align:right;margin-top:3px;font-family:inherit}
-main{padding:14px 22px 8px;max-width:960px}
+main{padding:14px 22px 8px;max-width:1080px}
 .nav{position:sticky;top:0;z-index:6;display:flex;gap:7px;align-items:center;flex-wrap:wrap;padding:9px 0;margin-bottom:12px;background:var(--bg);border-bottom:1px solid var(--line)}
 .nav .lb{color:var(--mut);font-size:12.5px}
 .nav a{color:#c9d6ea;text-decoration:none;font-size:13px;padding:6px 12px;border:1px solid #33415e;border-radius:8px;background:#18223a}
@@ -24,7 +28,7 @@ section[id]{scroll-margin-top:62px}
 h2{font-size:16px;margin:0 0 10px;color:var(--fg);font-weight:650}
 h2 .q{color:var(--mut);font-weight:400;font-size:13px;display:block;margin-top:2px}
 h3{font-size:13px;margin:16px 0 6px;color:var(--mut);font-weight:600;letter-spacing:.06em}
-.bar{display:flex;gap:10px;align-items:center;flex-wrap:wrap;padding:8px 22px;font-size:12.5px;color:var(--mut);max-width:960px}
+.bar{display:flex;gap:10px;align-items:center;flex-wrap:wrap;padding:8px 22px;font-size:12.5px;color:var(--mut);max-width:1080px}
 #stat b{color:var(--fg);font-weight:600}
 #stat .bad{color:var(--up)}
 select,input[type=number]{background:#121a2b;color:var(--fg);border:1px solid var(--line);border-radius:6px;padding:3px 6px;font-size:13px;font-family:inherit}
@@ -39,6 +43,17 @@ input[type=number]{width:82px}
 .link .t{font-weight:600;font-size:16px}
 .link .code,.code{color:var(--mut);font-size:11px;margin-left:6px;font-family:ui-monospace,monospace}
 .link .g{color:var(--mut);font-size:13.5px}
+.ltop{display:flex;gap:13px;align-items:flex-start}
+.lfig{flex:0 0 auto;margin-left:auto;text-align:right}
+.ltxt{flex:1 1 auto;min-width:0}
+.lthumb{width:170px;height:auto;border-radius:9px;border:1px solid var(--line);display:block;background:#000}
+.lcap{display:block;color:var(--mut);font-size:10.5px;margin-top:4px;max-width:170px;line-height:1.4;margin-left:auto}
+.strip{display:flex;flex-wrap:wrap;gap:11px;margin-top:9px}
+.tile{width:154px}
+.tile .ph{width:154px;height:104px;object-fit:contain;border-radius:8px;border:1px solid var(--line);display:block;background:#000}
+.tile .noimg{width:154px;height:104px;border-radius:8px;border:1px dashed var(--line);display:flex;align-items:center;justify-content:center;color:var(--mut);font-size:11.5px;background:#0b1020}
+.tile .n{font-size:13px;font-weight:600;margin-top:5px}
+.tile .w{font-size:11.5px;color:var(--mut);line-height:1.45}
 .num{font-family:ui-monospace,Consolas,monospace;font-size:13px}
 .row{display:flex;gap:8px;flex-wrap:wrap;margin-top:6px}
 .pill{background:#121a2b;border:1px solid var(--line);border-radius:20px;padding:2px 10px;font-size:12.5px;color:#c3cfe4}
@@ -79,7 +94,7 @@ details[open]{padding-bottom:12px}
 #moreLinks{border:0;background:none;padding:0;margin:4px 0 0}
 #moreLinks>summary{border-top:1px solid var(--line);padding-top:12px}
 #moreLinks .link:first-child{border-top:1px solid var(--line);padding-top:13px}
-footer{padding:12px 22px 40px;max-width:960px;color:var(--mut);font-size:12.5px;border-top:1px solid var(--line);margin-top:8px}
+footer{padding:12px 22px 40px;max-width:1080px;color:var(--mut);font-size:12.5px;border-top:1px solid var(--line);margin-top:8px}
 footer b{color:#b9c6dd}
 footer ul{margin:6px 0 0;padding-left:18px}
 footer li{margin:4px 0}
@@ -106,6 +121,10 @@ footer li{margin:4px 0}
   .plain{font-size:14px}
   .note{font-size:12.5px}
   .link .t{font-size:15px}
+  .lthumb{width:118px}
+  .lcap{max-width:118px;font-size:10px}
+  .tile{width:calc(50% - 6px)}
+  .tile .ph,.tile .noimg{width:100%}
   .nav{padding:8px 0;gap:6px}
   .nav a{padding:8px 12px;font-size:13.5px}
   section[id]{scroll-margin-top:96px}
@@ -182,6 +201,9 @@ footer li{margin:4px 0}
   <h2>此刻，地球上有人在听它们<span class="q">下面每一行都是这一分钟真的在收的链路，数据来自 NASA 深空网络的实时接口</span></h2>
   <div id="links">…</div>
   <div class="note" id="linksNote"></div>
+  <h3 id="idleHead" style="display:none">这一刻没有被听到的那些</h3>
+  <div class="strip" id="idleStrip"></div>
+  <div class="note" id="idleNote"></div>
 </section>
 
 <section class="card">
@@ -257,6 +279,7 @@ footer li{margin:4px 0}
     <li>链路数据取自 NASA 深空网络的 now 接口。实测它是每次请求现生成的，接口自带的时刻比本机晚 19–23 秒（页眉那条状态报的就是这个数）；默认 30 秒重采一次，约 2880 次请求、28 MB 流量一天。站点、口径、代号这三样字典走的是这个网络自己的配置清单，19 KB、服务端标了一小时缓存，所以也一样加了时间戳；它不跟着重采跑，只在打开页面时取一次。</li>
     <li>距离、接收功率、下行速率都是接口原值，我只做了单位换算。功率是天线口面收到的功率（dBm），量级在 −100 到 −120 之间是常态。</li>
     <li>「单程光时」是用接口给的距离除以真空光速算的，不是接口原字段。</li>
+    <li>上面那些名字旁边各有一张图。<b>接口不给图</b>——实测 <code>dsn.json</code> 全文 8,651 字节里 image、jpg、png、thumb 出现的次数都是 0，它连名字都只给三个字母的代号。所以图是我自己按代号一台一台从 NASA 图库找出来的（公有领域），本地缩到 400 像素宽、存在同目录的 <code>img/</code> 下，页面运行时不再向任何外部地址要一个字节。<b>这 18 个有中文名的代号里 17 个配上了图，只差 Danuri（KPLO）</b>——它是韩国的任务，NASA 图库里搜 Danuri、KPLO、Korea Lunar 全是 0 条，我没有别的来路，所以那一格留空并写明了原因。<br>图分两种，标签上分开写着：<b>「示意图」是画出来的</b>——除了地球自己拍的，没有哪台相机能拍到旅行者本身，新视野号那张连本体都只是逆光剪影；<b>「地面实拍」是它在地球厂房里的样子，不是在轨的样子</b>（韦伯拍的是还没装上的金镜、MMS 和 OSIRIS-REx 拍的是总装测试、Wind 那张是 1994 年发射前）。旅行者 1、2 号共用同一张，MMS 三台共用同一张：它们是同型号，没有相机能分清哪台是哪台。图取不到时整块自动消失，那一行退回纯文字。</li>
     <li>「没在名单里」不等于「不在了」。这页只有实时态：接口给的是这一刻哪面天线在收谁，它不给未来排班，NASA 那边的公开排班入口已经整个下线，我找遍了也拿不到，所以不能说旅行者 2 号下次几点被跟踪。旅行者 2 号现在在南天，而南天的 70 米口径只有堪培拉 DSS-43 一面，它一整条链路就挂在这一面天线上：DSS-43 一空闲，这页上就找不到它。查这一刻它到底忙不忙，看极坐标图上有橙色引线的那面，或者班表里 DSS-43 那一行。</li>
     <li>页面上的时刻一律按东八区显示，接口原值是 UTC，偏移写死 8 小时、不看夏令时。档案库「拍摄日」那一列还是世界时的日期：那是观测记录本身用的时区，硬换算成「北京那天」会让一半的记录错一天。</li>
     <li>赤经赤纬、银经银纬是<b>我算出来的</b>，接口只给方位和仰角。算法：地方恒星时（由接口时刻推格林尼治恒星时加站点经度）→ 地平转赤道 → 再转到 J2000 银道。站点经纬度来自同一份配置清单。验算是拿太阳做的：先用太阳的赤经赤纬正算出三个站各自的方位仰角，再喂回这套换算，三个站的残差都是 0.0 角秒（太阳位置本身用的是低精度式，0.01 度量级）。算出来的朱诺号在狮子座、旅行者 1 号在蛇夫座，和它们此刻真的所在星座对得上。</li>
@@ -577,6 +600,31 @@ const ZH={
   HST:['哈勃太空望远镜','近地轨道'], ORX:['OSIRIS-REx（APEX 扩展任务）',''],
   TGO:['痕量气体轨道器','火星轨道'],
   DSN:['测试链路','没有真实目标']
+};
+
+// dsn.json 全文 8,651 字节里 image/jpg/png/thumb 出现 0 次，接口根本不管图。
+// 所以图是我自己从 NASA 图库按代号一台一台找出来的，本地缩到 400px 存在 img/ 下，页面运行时不再向外部要一个字节。
+// 标「示意图」的是画出来的，不是相机拍的——旅行者这种小东西，没有任何相机能拍到它本身。
+// 标「地面实拍」的是它在地球上的厂房里，不是在轨的样子。
+// 只有 Danuri（KPLO）没配上图：它是韩国 KARI 的任务，NASA 图库里查不到（搜 Danuri / KPLO / Korea Lunar 全为 0 条）。
+const CIMG={
+  VGR1:['img/voyager.jpg','旅行者号示意图 · NASA PIA04495 · 不是实拍'],
+  VGR2:['img/voyager.jpg','旅行者号示意图 · NASA PIA04495 · 不是实拍'],
+  NHPC:['img/new-horizons.jpg','新视野号示意图 · NASA PIA21943 · 不是实拍'],
+  JWST:['img/jwst.jpg','金镜面阵实拍 · NASA GSFC e000368 · 还在地面上'],
+  HST:['img/hubble.jpg','哈勃在轨实拍 · NASA GSFC e002151 · 维修任务乘组拍'],
+  JNO:['img/juno.jpg','朱诺号示意图 · NASA PIA16869 · 不是实拍'],
+  MRO:['img/mro.jpg','火星勘测轨道器示意图 · NASA PIA04758 · 不是实拍'],
+  M01O:['img/odyssey.jpg','奥德赛号示意图 · NASA PIA04244 · 不是实拍'],
+  LRO:['img/lro.jpg','月球勘测轨道器示意图 · NASA PIA18163 · 不是实拍'],
+  SOHO:['img/soho.jpg','SOHO 示意图 · NASA PIA18170 · 不是实拍'],
+  TGO:['img/tgo.jpg','痕量气体轨道器示意图 · NASA PIA13310 · 不是实拍'],
+  ORX:['img/osiris-rex.jpg','OSIRIS-REx 地面实拍 · NASA GSFC e000397 · 热真空试验'],
+  MMS1:['img/mms.jpg','MMS 地面实拍 · NASA GSFC e001106 · 四台同型号'],
+  MMS2:['img/mms.jpg','MMS 地面实拍 · NASA GSFC e001106 · 四台同型号'],
+  MMS4:['img/mms.jpg','MMS 地面实拍 · NASA GSFC e001106 · 四台同型号'],
+  SWFO:['img/swfo.jpg','SWFO-L1 地面实拍 · NASA KSC 2025 · 发射前'],
+  WIND:['img/wind.jpg','Wind 号地面实拍 · NASA KSC-94PC-1147 · 1994 年发射前']
 };
 
 // 88 个星座的缩写 -> 中文名。缩写和拉丁名是国际天文学联合会那套，中文这一列是我翻的注释。
@@ -921,11 +969,28 @@ function whereToLook(eq){
     (up?'今天 '+bj(up)+'（北京）它会从'+dirOf(toHor(eq.ra,eq.dec,lat,lon,up).az)+'方向升起来。':'今天它不会升起来了。');
 }
 
+function renderIdle(liveCodes){
+  const rest=Object.keys(ZH).filter(c=>c!=='DSN' && !liveCodes.has(c));
+  $('idleHead').style.display=rest.length?'':'none';
+  if (!rest.length){ $('idleStrip').innerHTML=''; $('idleNote').textContent=''; return; }
+  $('idleStrip').innerHTML=rest.map(c=>{
+    const nm=nmOf(c), im=CIMG[c];
+    return '<div class="tile">'+
+      (im?'<img class="ph" src="'+im[0]+'" alt="'+nm.name+' 资料图" loading="lazy" onerror="this.outerHTML=\'<div class=&quot;noimg&quot;>图没加载出来</div>\'">'
+         :'<div class="noimg">NASA 图库里没有它的图</div>')+
+      '<div class="n">'+nm.name+'<span class="code">'+c+'</span></div>'+
+      '<div class="w">'+(nm.where||'')+'</div></div>';
+  }).join('');
+  $('idleNote').innerHTML='这一格是<b>这一刻没被任何一面天线听到</b>的那些——它们照样在飞、在原地，只是这一分钟地球上没人收它。'+
+    '「没在名单里」不等于「不在了」，这页只有实时态、没有排班。'+
+    (rest.some(c=>!CIMG[c])?'<b>Danuri（KPLO）是韩国的任务，NASA 图库里查不到它的图</b>（搜 Danuri、KPLO、Korea Lunar 全为 0 条），所以那一格是空的。':'');
+}
+
 function renderLinks(){
   const ts=collect(), live=ts.filter(t=>t.down.length||t.ups);
   const eqMap={}; pointings().forEach(x=>{ if(!eqMap[x.code]||x.live) eqMap[x.code]=x; });
   if (!live.length){ $('links').innerHTML='<span class="mut">这一刻没有天线在收发射链路。</span>';
-    $('linksNote').textContent=''; return; }
+    $('linksNote').textContent=''; renderIdle(new Set()); return; }
   const rows=live.map(t=>{
     const nm=nmOf(t.code);
     const best=t.down.reduce((m,s)=>s.rate>(m?m.rate:0)?s:m,null);
@@ -943,8 +1008,10 @@ function renderLinks(){
     }
     if (pw!=null) analog.push('天线收到它时只剩 '+pw+' dBm，比你手机现在收到的基站信号（−70 dBm 这个量级）弱 <b>'+
       fmtBig(Math.pow(10,(-70-pw)/10))+' 倍</b>——可它还是被读出来了');
-    return '<div class="link"><div>'+(nm.known?'<span class="t">'+nm.name+'</span>':'')+
-      '<span class="code">'+t.code+'</span></div>'+
+    const im=CIMG[t.code];
+    const fig=im?'<div class="lfig"><img class="lthumb" src="'+im[0]+'" alt="'+nm.name+' 示意图" loading="lazy" onerror="this.parentNode.remove()"><span class="lcap">'+im[1]+'</span></div>':'';
+    return '<div class="link"><div class="ltop"><div class="ltxt">'+(nm.known?'<span class="t">'+nm.name+'</span>':'')+
+      '<span class="code">'+t.code+'</span></div>'+fig+'</div>'+
       '<div class="g">'+(nm.where?nm.where+' · ':'')+(nm.known?'':'<span class="mut">代号未收录</span> · ')+
       '天线 '+dish+'（'+sites+'）</div>'+
       '<div class="row">'+
@@ -966,6 +1033,7 @@ function renderLinks(){
       ' 条链路在收，点开看（摊开的这三条是离你最远的）</summary>'+rest.join('')+'</details>':'');
   $('linksNote').innerHTML='一共 '+live.length+' 条链路在收。按远近排的，最远的那条在最上面。' +
     '<b>距离那一栏写着「这一刻接口没给距离」，是它真的没给，不是它不在了</b>——绕地球转的那几颗（月球轨道器、地球轨道的卫星）距离是零到几万公里量级，接口通常不单独报。';
+  renderIdle(new Set(live.map(t=>t.code)));
 }
 
 function renderTable(){
