@@ -204,6 +204,14 @@ footer li{margin:4px 0}
   <h3 id="idleHead" style="display:none">这一刻没有被听到的那些</h3>
   <div class="strip" id="idleStrip"></div>
   <div class="note" id="idleNote"></div>
+  <h3 id="histHead" style="display:none">下面这一份，是我自己攒的</h3>
+  <div class="link" id="histBox" style="display:none">
+    <div class="g" id="histNote"></div>
+    <div class="row" style="margin-top:10px">
+      <button class="chip go" id="histCsv">导出这份记录（CSV，能用 Excel 打开）</button>
+      <button class="chip" id="histWipe">清空</button>
+    </div>
+  </div>
 </section>
 
 <section class="card">
@@ -316,6 +324,10 @@ footer li{margin:4px 0}
     <li><b>右边那张是 DSCOVR 上的 EPIC 相机</b>：离地心约 150 万公里，太阳在它背后，所以它眼里的地球永远是整颗照亮的一面，没有晨昏线——这是它最值钱的地方，也是它看不清细节的原因（这个距离上光都要走 5 秒）。清单接口开放跨域，图本身不开放；<b>一天只有十来张，公开还有一到两天延迟</b>：10 月 19 日这天查过去六天，18、19 两天空着，最新一条停在 17 日 22:17 UTC（那天 13 张，约 1 小时 44 分一张，图 1080×1080、两百来 KB）。</li>
     <li><b>那张图中心的经纬度、还有那条位置，都是接口自带的字段</b>，不是我算的；只有「离地心多少万公里」是我拿位置那三个分量开方算的，「光走几秒」再除一个真空光速。至于图中心那个点正对着哪儿——10 月 17 日那一张它报的是北纬 0.1 度、西经 165.6 度，也就是照片是朝着中太平洋拍的，界面上那个「西经」是照它给的正负号翻出来的，不是我自己挑的。</li>
     <li><b>那个 2020 年就停更的桌面壁纸小程序（EarthLiveSharp）走的也是同一颗卫星、同一套目录</b>：10 月 19 日我照它的拼法去取，它那个下载域名还在，清单和 1／2／4 分块的瓦片全是通的，<b>所以它没坏</b>。它只是个把图铺在你 Windows 桌面当壁纸的本地程序（.NET Framework 4.5.2），跑不进浏览器，也没有网页版，所以这一格是照同一套目录在浏览器里重做了一遍。顺带一对，它读的那份清单比这一格用的那份慢一格——同一颗卫星开了两个目录，更新时刻不一样。</li>
+    <li>下面是「这些帧是我自己攒的」那一格的口径，也单列：<b>接口每采一次就把上一轮覆盖掉，这页以前是负责扔掉的那个</b>，所以这一格把「变了」的那些留下来——天线挪了一度、换了任务、某一路信号的功率或速率变了、距离跳了一格，各写一行；没变的不写。存的位置是你这台设备的浏览器本地，不上传、不联网、页面关着的时候不采，所以「攒出来的收听时长」只算你开着页面的那段时间；关页面再回来时我会先补一条空状态，把那段空档从天线身上切断，免得六小时的关机被记成它一直在听。</li>
+    <li><b>接口那个距离字段只有三位有效数字</b>：10 月 22 日实测旅行者 2 号的原值是 <code>21600000000</code> 公里，也就是精确到 1 亿公里这一档；它一天退行约 133 万公里，<b>比那一档小 75 倍</b>，所以这一列要 75 天左右才跳一次。这直接判死了一件事：拿自己攒的这条距离列去拟它的退行速度是做不到的，两个半月只多出一个格子、每个读数还各带半档不确定，误差在 ±50% 量级。同一趟核出来：接口的 <code>rtlt</code>（往返光行时）在 10 月 22 日那份里全部是字符串 <code>"NaN"</code>，一个可用值都没给，所以这页凡是「光走多久」都是拿距离除以光速算的，不是接口报的。距离这一列能攒出来的只有事件——它哪天从 216 跳到 217 亿公里。</li>
+    <li><b>这一页以前印出来的「216.00 亿公里」里有两位是我自己造的</b>：接口原值是 <code>21600000000</code>，只有三位有效数字，而旧的那个格式化函数按 <code>toFixed(2)</code> 补齐小数、亿那一档补两位、万公里那一档补一位（<code>91500000</code> 会印成「9150.0 万公里」）。那多出来的位数不是测量，是凑格式。现在小数位跟着三位有效数字切，同一个数在页面上任何地方都只写成「216 亿公里」「9150 万公里」。</li>
+    <li>那份 CSV 是我自己按记录拼的表头（<code>type,t_local_utc,t_iface_utc,dish,az_deg,el_deg,user,act,sig_idx,tgt,band,dir,active,pwr_dbm,rate_bps,rng_km</code>），<code>type</code> 那一列 d＝天线状态、s＝某一路信号、r＝距离，空着的列是这一类记录本来就没有那个字段，不是丢了。两个时刻都摊开写：本机收到的时刻、接口自己声称的观测时刻，两列相减就是这页顶部那个「比本机晚多少秒」——攒够几十次以后那个平均值是你自己量的，不是任何人告诉你的。</li>
     </ul>
   </details>
 </footer>
@@ -795,8 +807,10 @@ const lastSeen={};   // 每个代号上一次拿到距离时的那个数和时�
 function fmtKm(v){
   if (v==null || !isFinite(v)) return '—';
   if (v<1e4) return Math.round(v).toLocaleString('en-US')+' 公里';
-  if (v<1e8) return (v/1e4).toFixed(1)+' 万公里';
-  return (v/1e8).toFixed(2)+' 亿公里';
+  // 接口这一列只有三位有效数字（VGR2 原值就是 21600000000），小数位按三位切：
+  // 印成「216.00 亿公里」是把两个我根本没拿到的位数摆在你眼前。
+  const band=v<1e8?1e4:1e8, m=v/band, dec=Math.max(0,3-String(Math.floor(m)).length);
+  return m.toFixed(dec)+(v<1e8?' 万公里':' 亿公里');
 }
 function fmtLT(km){
   if (!isFinite(km) || km<=0) return '—';
@@ -844,6 +858,11 @@ function nmOf(c){
   if (z) return {code:k, name:z[0], where:z[1], off:off||'', known:true};
   if (off) return {code:k, name:off, where:'', off:off, known:true};
   return {code:k, name:k, where:'', off:'', known:false};
+}
+// 名字本身已经带括号的时候（「OSIRIS-REx（APEX 扩展任务）」）别再补一个代号括号，否则会印成两对括号套在一起
+function labelOf(c){
+  const n=nmOf(c);
+  return n.name.indexOf('（')>=0||n.name===c? n.name : n.name+'（'+n.code+'）';
 }
 
 function collect(){
@@ -984,6 +1003,162 @@ function renderIdle(liveCodes){
   $('idleNote').innerHTML='这一格是<b>这一刻没被任何一面天线听到</b>的那些——它们照样在飞、在原地，只是这一分钟地球上没人收它。'+
     '「没在名单里」不等于「不在了」，这页只有实时态、没有排班。'+
     (rest.some(c=>!CIMG[c])?'<b>Danuri（KPLO）是韩国的任务，NASA 图库里查不到它的图</b>（搜 Danuri、KPLO、Korea Lunar 全为 0 条），所以那一格是空的。':'');
+}
+
+/* ---------------- 我自己攒的这一份 ----------------
+   接口每采一次就把上一轮覆盖掉，页面以前是负责扔掉的那个。这一格把变化留下来：
+   只写「变了」的天线、信号、距离，不写快照，所以一晚只有几千行，能待在浏览器本地。
+   不上传、不再向接口要第二个字节；页面关着的那一段不算成「它在听」。 */
+const HK_EV='dsnow.frames.v1';
+const HK_MAX=25000;           // 行；超了丢最老的，页面上会报丢过多少
+const V_KMS=15.34;            // 旅行者 2 号相对太阳的退行速度，公开值，只用来算「距离那一格多久跳一次」
+let ev=[], histPrev=null, histLast=0, histDropped=0, histFail=false, wipeArm=0;
+try{ const s=JSON.parse(localStorage.getItem(HK_EV)||'[]'); if (Array.isArray(s)) ev=s; }catch(e){ ev=[]; }
+// 页面重开一次，内存里的上一帧就没了，但存档里最后一行的时刻还在。把它当基准，
+// 否则「关掉三个小时再打开」会被算成那三个小时天线一直挂着那个代号。
+if (ev.length) for (const x of ev) if (x[1]>histLast) histLast=x[1];
+
+function snapFrame(){
+  const ds={}, ss={}, rs={};
+  for (const [id,d] of Object.entries((dsn&&dsn.dishes)||{})){
+    ds[id]=[+d.az,+d.el,String(d.user||'').toUpperCase(),String(d.act||'')];
+    (d.sigs||[]).forEach((s,i)=>{ ss[id+'#'+i]=[String(s.tgt||'').toUpperCase(),s.band||'',s.dir||'',
+      s.active?1:0,isFinite(+s.pwr)?+s.pwr:'',isFinite(+s.rate)?+s.rate:'']; });
+    for (const [c,x] of Object.entries(d.tgts||{})) if (x&&isFinite(+x.rng)&&+x.rng>0) rs[id+'#'+String(c).toUpperCase()]=+x.rng;
+  }
+  return {ds,ss,rs};
+}
+function sameArr(a,b){
+  if (!a||!b||a.length!==b.length) return false;
+  for (let i=0;i<a.length;i++) if (a[i]!==b[i]) return false;
+  return true;
+}
+function histSave(){
+  if (ev.length>HK_MAX){ ev=ev.slice(ev.length-HK_MAX); histDropped++; }
+  // 浏览器的存储配额是按字节算的，撞上之后砍一半重试；只试两轮的话，砍完那次仍可能写不进去，
+  // 于是这一整批就丢了。这里退到只剩一小截为止，宁可少留几行也别把这一轮全丢掉。
+  for (let k=0;k<8;k++){
+    try{ localStorage.setItem(HK_EV,JSON.stringify(ev)); histFail=false; return; }
+    catch(e){
+      histFail=true;
+      if (ev.length<=200) break;
+      ev=ev.slice(Math.floor(ev.length/2)); histDropped++;
+    }
+  }
+}
+function histAdd(){
+  if (!dsn) return;
+  const now=Math.round(Date.now()/1000), it=Math.round(+dsn.time)||0, cur=snapFrame(), prev=histPrev;
+  const gap=!prev || (now-histLast)>(ivSec?ivSec*4:120)+60;
+  if (gap&&histLast) for (const id of Object.keys(cur.ds)) ev.push(['d',histLast,it,id,'','','','']);
+  for (const [id,v] of Object.entries(cur.ds)){
+    if (!gap&&sameArr(prev.ds[id],v)) continue;
+    ev.push(['d',now,it,id,v[0],v[1],v[2],v[3]]);
+  }
+  for (const [k,v] of Object.entries(cur.ss)){
+    if (!gap&&sameArr(prev.ss[k],v)) continue;
+    const p=k.split('#'); ev.push(['s',now,it,p[0],+p[1]].concat(v));
+  }
+  for (const [k,v] of Object.entries(cur.rs)){
+    if (!gap&&prev.rs[k]===v) continue;
+    const p=k.split('#'); ev.push(['r',now,it,p[0],p[1],'','',v]);
+  }
+  histSave(); histPrev=cur; histLast=now;
+  renderHist();
+}
+function fmtHr(s){
+  if (!isFinite(s)||s<=0) return '还没攒满一分钟';
+  let h=Math.floor(s/3600), m=Math.round((s-h*3600)/60);
+  if (m===60){ h++; m=0; }
+  return (h?h+' 小时 ':'')+m+' 分钟';
+}
+// 时间戳排序后摊成「哪一段时间里哪面天线挂着哪个代号」；关页面时补的那条空状态把区间切断，所以空档不会被算成在听
+function histListen(){
+  const rows=ev.filter(x=>x[0]==='d').slice().sort((a,b)=>a[1]-b[1]);
+  const segs={}, open={};
+  for (const r of rows){
+    const id=r[3], t=r[1], user=r[6], o=open[id];
+    if (o&&o.user) segs[o.user]=(segs[o.user]||0)+Math.max(0,t-o.t);
+    open[id]={t,user};
+  }
+  return {segs,open};
+}
+function histLag(){
+  const n=ev.filter(x=>x[2]>0); if (!n.length) return null;
+  let sum=0,mx=-1e9,mn=1e9;
+  for (const r of n){ const L=r[1]-r[2]; sum+=L; if(L>mx)mx=L; if(L<mn)mn=L; }
+  return {n:n.length,avg:Math.round(sum/n.length),max:mx,min:mn};
+}
+// 距离那一列的步长：三位有效数字 ⇒ 最后一位所在的那一档就是它能分辨的最小变化
+function rngStep(km){ return Math.pow(10,Math.floor(Math.log10(km))-2); }
+function fmtStep(k){ return k>=1e8?(k/1e8+' 亿公里'):k>=1e4?(k/1e4+' 万公里'):Math.round(k)+' 公里'; }
+function renderHist(){
+  const head=$('histHead'), box=$('histBox');
+  if (!ev.length){ head.style.display='none'; box.style.display='none'; $('histNote').innerHTML=''; return; }
+  head.style.display=''; box.style.display='';
+  const ts=ev.map(x=>x[1]).filter(t=>t>0);
+  const t0=Math.min.apply(null,ts), t1=Math.max.apply(null,ts);
+  // 连续采样时长：相邻两条记录差不超过 10 分钟才算「那会儿页面是开着的」
+  const ord=ts.slice().sort((a,b)=>a-b); let live=0;
+  for (let i=1;i<ord.length;i++){ const d=ord[i]-ord[i-1]; if (d<=600) live+=d; }
+  const L=histListen(), lg=histLag();
+  const top=Object.entries(L.segs).filter(x=>x[1]>0&&x[0]!=='DSN').sort((a,b)=>b[1]-a[1]).slice(0,3);
+  const nowLive=[...new Set(Object.values(L.open).filter(o=>o.user&&o.user!=='DSN').map(o=>o.user))];
+  const rr=ev.filter(x=>x[0]==='r').slice().sort((a,b)=>a[1]-b[1]);
+  const byCode={}; for (const x of rr) (byCode[x[4]]=byCode[x[4]]||[]).push(x);
+  const uniq={}; for (const c in byCode) uniq[c]=new Set(byCode[c].map(x=>x[7])).size;
+  const changed=Object.keys(uniq).filter(c=>uniq[c]>1);
+  const newest=Object.keys(byCode).map(c=>byCode[c][byCode[c].length-1]);
+  const far=newest.sort((a,b)=>b[7]-a[7])[0];
+  let distLine='';
+  if (far){
+    const step=rngStep(far[7]), grid=Math.round(far[7]/step);
+    const isVG=(far[4]==='VGR1'||far[4]==='VGR2');
+    // 一档要多久跳一格 = 档位 ÷ 退行速度；这一句是纯算术，不依赖我攒到几个读数，所以永远成立、也不会过期
+    distLine='<br><b>距离这一列我存到的值：</b>'+Object.keys(byCode).slice(0,4).map(c=>labelOf(c)+' 攒了 '+byCode[c].length+' 次').join('、')+
+      '。接口原值只有三位有效数字——最远的这条是 '+labelOf(far[4])+'，'+fmtKm(far[7])+'，'+
+      '而它能分辨的最小一档是 <b>'+fmtStep(step)+'</b>。'+
+      (changed.length?
+        '<br>已经跳过格的：'+changed.map(c=>labelOf(c)+'（我记到 '+uniq[c]+' 个不同读数）').join('、')+
+        '。哪一天跳的、几点跳的，只有你这份记录里有。'
+        :
+        '<br>到现在为止每个代号都还是同一个读数，<b>一次都没跳过格</b>——这不是我没攒到，是这一列本来就跳得慢。')+
+      // 最远这条本身就是旅行者时，「一档是 1 亿公里」上面刚说过，别再复述一遍
+      '<br>'+(isVG
+        ? '旅行者 2 号按公开口径退行 '+V_KMS+' 公里/秒，一天只挪 '+fmtKm(V_KMS*86400)+'，<b>所以这一档要 '+Math.round(step/V_KMS/86400)+' 天才跳一格</b>。'
+        : '旅行者离得比这条还远一个量级：它那边一档就是 <b>'+fmtStep(1e8)+'</b>，按公开口径退行 '+V_KMS+' 公里/秒、一天只挪 '+fmtKm(V_KMS*86400)+'，<b>要 '+Math.round(1e8/V_KMS/86400)+' 天才跳一格</b>。')+
+      '我原本想拿自己攒的这条列去拟它的退行速度，走到这里就判死了：两个半月才多出一个格子，每个读数还各带半档的不确定，误差在 ±50% 这个量级。'+
+      '这一列真正攒得出来的是事件——<b>'+labelOf(far[4])+' 哪天从 '+fmtStep(step*grid)+' 跳到 '+fmtStep(step*(grid+1))+'</b>，那一刻全网只有你的记录里有。';
+  }
+  $('histNote').innerHTML=
+    '一共 <b>'+ev.length.toLocaleString('en-US')+'</b> 行变化记录 · 从 '+bj(t0*1000)+' 到 '+bj(t1*1000)+'（北京）· '+
+    '其中页面真的开着大约 <b>'+fmtHr(live)+'</b>。'+
+    (top.length?'<br>攒出来的收听时长（只算这段里天线确实挂着那个代号的分钟）：'+
+      top.map(x=>'<b>'+labelOf(x[0])+'</b> '+fmtHr(x[1])).join('、')+'.':'')+
+    (nowLive.length?'<br>此刻还挂着的：'+nowLive.map(labelOf).join('、')+'。':'')+
+    (lg?'<br><b>接口时刻比本机晚：</b>平均 '+lg.avg+' 秒、最快 '+lg.min+' 秒、最慢 '+lg.max+' 秒（'+lg.n.toLocaleString('en-US')+' 次采样，这一份是我自己攒的，不是别人给的）。':'')+
+    distLine+
+    '<br><span class="mut">这一份只存在你这台设备的这个浏览器里：换个浏览器、清一下缓存就没了；页面关着的时候不采；'+
+    '攒到 '+HK_MAX.toLocaleString('en-US')+' 行会自动丢最老的'+(histDropped?'（已经丢过 '+histDropped.toLocaleString('en-US')+' 行）':'')+'。'+
+    (histFail?'<b>浏览器刚才不肯再存了，我砍掉一半重试的——尽快导出。</b>':'')+'建议每周导出一次留底。</span>';
+}
+function histCols(r){
+  const o=['','','','','','','','','','','','','','','',''];
+  o[0]=r[0]; o[1]=new Date(r[1]*1000).toISOString(); o[2]=r[2]?new Date(r[2]*1000).toISOString():''; o[3]=r[3];
+  if (r[0]==='d'){ o[4]=r[4];o[5]=r[5];o[6]=r[6];o[7]=r[7]; }
+  else if (r[0]==='s'){ o[8]=r[4];o[9]=r[5];o[10]=r[6];o[11]=r[7];o[12]=r[8];o[13]=r[9];o[14]=r[10]; }
+  else { o[9]=r[4];o[15]=r[7]; }
+  return o;
+}
+function histExport(){
+  const head='type,t_local_utc,t_iface_utc,dish,az_deg,el_deg,user,act,sig_idx,tgt,band,dir,active,pwr_dbm,rate_bps,rng_km';
+  const body=ev.slice().sort((a,b)=>a[1]-b[1]).map(r=>histCols(r).map(x=>'"'+String(x==null?'':x).replace(/"/g,'""')+'"').join(','));
+  return '\ufeff'+head+'\n'+body.join('\n')+'\n';
+}
+function dl(name,text){
+  const u=URL.createObjectURL(new Blob([text],{type:'text/csv;charset=utf-8'}));
+  const a=document.createElement('a'); a.href=u; a.download=name; document.body.appendChild(a); a.click();
+  setTimeout(()=>{ URL.revokeObjectURL(u); a.remove(); },2000);
 }
 
 function renderLinks(){
@@ -1538,6 +1713,7 @@ async function pull(){
     $('lastAt').textContent='上次成功 '+bj()+'（北京）';
     SKY=null;
     renderHero(); renderLinks(); renderTable();
+    histAdd();
     if ($('deep').open){ drawRuler(); drawSky(); drawEqMap(); }
   }catch(e){
     $('stat').innerHTML='<span class="bad">深空网络接口没通。</span>可能是源站在维护，也可能是这个域名在你这边没解析出来。'+(dsn?' 下面还是上次采到的数据。':'');
@@ -1831,6 +2007,21 @@ window.addEventListener('resize',()=>{ if(dsn && $('deep').open){ drawRuler(); d
 setInterval(refreshLocal, 20000);
 
 $('himaGo').onclick=himaGo; $('epicGo').onclick=epicGo;
+
+$('histCsv').onclick=()=>{
+  dl('dsnow-frames-'+new Date().toISOString().slice(0,10)+'.csv',histExport());
+  $('histCsv').textContent='已把 '+ev.length.toLocaleString('en-US')+' 行写进下载里的 CSV';
+  setTimeout(()=>{ $('histCsv').textContent='导出这份记录（CSV，能用 Excel 打开）'; },8000);
+};
+// 清空只删你这台设备上的这一份，删不了接口那边任何东西，所以两步确认就够
+$('histWipe').onclick=e=>{
+  const now=Date.now(), lbl='清空';
+  if (!wipeArm||now-wipeArm>15000){ wipeArm=now; e.target.textContent='真要清掉？15 秒内再点一次'; return; }
+  wipeArm=0; ev=[]; histPrev=null; histLast=0; histDropped=0;
+  try{ localStorage.removeItem(HK_EV); }catch(x){}
+  e.target.textContent=lbl; renderHist();
+};
+renderHist();
 
 setInterval(tickClock,1000); tickClock();
 renderTonight();
